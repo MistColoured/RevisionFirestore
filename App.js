@@ -7,81 +7,157 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { List, ListItem, SearchBar } from "react-native-elements";
 
-import firebase from './components/firebase';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap RRRerstyttts on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import firebase, { auth, provider } from './components/firebase';
+import Todo from './components/Todo'
+import styles from './components/style';
 
 export default class App extends Component {
   state = {
-    // currentTime: { hours: '11', minutes: '30', seconds: '1' },
-    currentTime: new Date().setMilliseconds(0),
-    // eventList: [{ id: '34uy3hjk34h15', event: 'Mikeys event', date: '10/16/18 17:30' }],
-    eventList: [],
-    event: '',
-    date: '',
-    user: null,
+    todoList: [],
+    todo: '',
+    loading: false,
+    // user: null,
+    user: { uid: '2QfgNSNHwGQi1W53lYORVmn65l53' },
+    data: [],
+    page: 1,
+    seed: 1,
+    error: null,
+    refreshing: false,
   }
 
   componentDidMount = () => {
-    // console.log('Got here')
-    const eventRef = firebase.database().ref(`users/2QfgNSNHwGQi1W53lYORVmn65l53/todoList`);
-    // console.log('Got here')
-    eventRef.on('value', (snapshot) => {
+    // const { uid } = this.state.user
+    // const eventRef = firebase.database().ref(`users/${uid}/todoList`);
+    // this.listenForItems(eventRef)
+    this.makeRemoteRequest();
+  }
+
+  makeRemoteRequest = () => {
+    const { page, seed } = this.state;
+    const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
+    this.setState({ loading: true });
+
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          data: page === 1 ? res.results : [...this.state.data, ...res.results],
+          error: res.error || null,
+          loading: false,
+          refreshing: false
+        });
+      })
+      .catch(error => {
+        this.setState({ error, loading: true });
+      });
+  };
+
+  listenForItems = (itemsRef) => {
+    this.setState({ loading: true })
+    itemsRef.once('value', (snapshot) => {
       const newState = [];
       if (snapshot.exists()) {
         const items = snapshot.val();
         Object.entries(items).forEach(([key, val]) => {
           newState.push({
-            id: key,
-            event: val.event,
-            date: val.date,
+            todo: val.todo,
+            _key: key,
           });
           console.log('Something', key)
         });
-        // TODO Probably use a library to sort the data?
-        // console.log('Sorting...', newState);
-        // newState.sort((a, b) => a.date.localeCompare(b.date));
-        // console.log('Sorted...', newState);
       }
+      console.log('newState', newState)
       this.setState({
-        eventList: newState,
+        todoList: newState,
+        loading: false,
       });
     });
   }
+  handleRefresh = () => {
+    this.setState(
+      {
+        page: 1,
+        seed: this.state.seed + 1,
+        refreshing: true
+      },
+      () => {
+        this.makeRemoteRequest();
+      }
+    );
+  };
 
+  handleLoadMore = () => {
+    this.setState(
+      {
+        page: this.state.page + 1
+      },
+      () => {
+        this.makeRemoteRequest();
+      }
+    );
+  };
+
+  renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 10,
+          width: "86%",
+          backgroundColor: "#CED0CE",
+          marginLeft: "14%"
+        }}
+      />
+    );
+  };
+
+  renderHeader = () => {
+    return <SearchBar placeholder="Type Here..." lightTheme round />;
+  };
+
+  renderFooter = () => {
+    // if (!this.state.loading) return null;
+
+    return (
+      <View
+        style={{
+          paddingVertical: 20,
+          borderTopWidth: 1,
+          borderColor: "#CED0CE"
+        }}
+      >
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
+  };
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
+      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+        <FlatList
+          data={this.state.data}
+          renderItem={({ item }) => (
+            <ListItem
+              roundAvatar
+              title={`${item.name.first} ${item.name.last}`}
+              subtitle={item.email}
+              avatar={{ uri: item.picture.thumbnail }}
+              containerStyle={{ borderBottomWidth: 0 }}
+            />
+          )}
+          keyExtractor={item => item.email}
+          ItemSeparatorComponent={this.renderSeparator}
+          ListHeaderComponent={this.renderHeader}
+          ListFooterComponent={this.renderFooter}
+          onRefresh={this.handleRefresh}
+          refreshing={this.state.refreshing}
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={50}
+        />
+      </List>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+
