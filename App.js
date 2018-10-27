@@ -21,43 +21,19 @@ export default class App extends Component {
     loading: false,
     // user: null,
     user: { uid: '2QfgNSNHwGQi1W53lYORVmn65l53' },
-    data: [],
-    page: 1,
-    seed: 1,
     error: null,
     refreshing: false,
   }
 
   componentDidMount = () => {
-    // const { uid } = this.state.user
-    // const eventRef = firebase.database().ref(`users/${uid}/todoList`);
-    // this.listenForItems(eventRef)
-    this.makeRemoteRequest();
+    const { uid } = this.state.user
+    const eventRef = firebase.database().ref(`users/${uid}/todoList`);
+    this.listenForItems(eventRef)
   }
-
-  makeRemoteRequest = () => {
-    const { page, seed } = this.state;
-    const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-    this.setState({ loading: true });
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: page === 1 ? res.results : [...this.state.data, ...res.results],
-          error: res.error || null,
-          loading: false,
-          refreshing: false
-        });
-      })
-      .catch(error => {
-        this.setState({ error, loading: true });
-      });
-  };
 
   listenForItems = (itemsRef) => {
     this.setState({ loading: true })
-    itemsRef.once('value', (snapshot) => {
+    itemsRef.on('value', (snapshot) => {
       const newState = [];
       if (snapshot.exists()) {
         const items = snapshot.val();
@@ -79,23 +55,12 @@ export default class App extends Component {
   handleRefresh = () => {
     this.setState(
       {
-        page: 1,
-        seed: this.state.seed + 1,
         refreshing: true
       },
       () => {
-        this.makeRemoteRequest();
-      }
-    );
-  };
-
-  handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1
-      },
-      () => {
-        this.makeRemoteRequest();
+        const { uid } = this.state.user
+        const eventRef = firebase.database().ref(`users/${uid}/todoList`);
+        this.listenForItems(eventRef)
       }
     );
   };
@@ -118,41 +83,44 @@ export default class App extends Component {
   };
 
   renderFooter = () => {
-    // if (!this.state.loading) return null;
+    if (!this.state.loading) return null;
 
     return (
       <View
         style={{
           paddingVertical: 20,
           borderTopWidth: 1,
-          borderColor: "#CED0CE"
+          borderColor: "#ee1173"
         }}
       >
         <ActivityIndicator animating size="large" />
       </View>
     );
   };
+
   render() {
+    const { todoList } = this.state;
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+      <List containerStyle={{ borderTopWidth: 12, borderBottomWidth: 12 }}>
         <FlatList
-          data={this.state.data}
+          data={todoList}
           renderItem={({ item }) => (
             <ListItem
               roundAvatar
-              title={`${item.name.first} ${item.name.last}`}
-              subtitle={item.email}
-              avatar={{ uri: item.picture.thumbnail }}
+              // title={`${item.name.first} ${item.name.last}`}
+              title={`${item.todo} ${item.todo}`}
+              // subtitle={item.email}
+              // avatar={{ uri: item.picture.thumbnail }}
               containerStyle={{ borderBottomWidth: 0 }}
             />
           )}
-          keyExtractor={item => item.email}
+          keyExtractor={item => item._key}
           ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
+          // onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
       </List>
