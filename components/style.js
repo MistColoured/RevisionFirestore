@@ -76,6 +76,12 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     paddingBottom: 16,
   },
+  button: {
+    backgroundColor: '#00bb00',
+    height: 80,
+    justifyContent: 'center',
+    fontSize: 26,
+  }
 });
 
 export default styles;

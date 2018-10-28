@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableHighlight } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
 
 import firebase, { auth, provider } from './components/firebase';
@@ -23,17 +23,19 @@ export default class App extends Component {
     user: { uid: '2QfgNSNHwGQi1W53lYORVmn65l53' },
     error: null,
     refreshing: false,
+    embedLevel: '',
   }
 
   componentDidMount = () => {
-    const { uid } = this.state.user
-    const eventRef = firebase.database().ref(`users/${uid}/todoList`);
-    this.listenForItems(eventRef)
+    this.listenForItems()
   }
 
-  listenForItems = (itemsRef) => {
+  listenForItems = () => {
+    const { user, embedLevel } = this.state
+    const todoRef = firebase.database().ref(`users/${user.uid}/todoList/${embedLevel}`);
+
     this.setState({ loading: true })
-    itemsRef.on('value', (snapshot) => {
+    todoRef.on('value', (snapshot) => {
       const newState = [];
       if (snapshot.exists()) {
         const items = snapshot.val();
@@ -98,21 +100,27 @@ export default class App extends Component {
     );
   };
 
+  onPress = (_key) => {
+    const { embedLevel } = this.state;
+    this.setState({
+      embedLevel: embedLevel.concat('/', _key),
+    },
+      () => this.listenForItems());
+    console.log('Button pressed', _key)
+  }
   render() {
     const { todoList } = this.state;
     return (
-      <List containerStyle={{ borderTopWidth: 12, borderBottomWidth: 12 }}>
+      <View>
         <FlatList
           data={todoList}
           renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              // title={`${item.name.first} ${item.name.last}`}
-              title={`${item.todo} ${item.todo}`}
-              // subtitle={item.email}
-              // avatar={{ uri: item.picture.thumbnail }}
-              containerStyle={{ borderBottomWidth: 0 }}
-            />
+            <TouchableHighlight
+              style={styles.button}
+              onPress={() => { this.onPress(item._key) }}
+            >
+              <Text> {item.todo} </Text>
+            </TouchableHighlight>
           )}
           keyExtractor={item => item._key}
           ItemSeparatorComponent={this.renderSeparator}
@@ -123,7 +131,7 @@ export default class App extends Component {
           // onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
-      </List>
+      </View>
     );
   }
 }
