@@ -7,12 +7,21 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableHighlight, YellowBox } from 'react-native';
 import { List, ListItem, SearchBar } from "react-native-elements";
+import _ from 'lodash'
 
 import firebase, { auth, provider } from './components/firebase';
 import Todo from './components/Todo'
 import styles from './components/style';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 
 export default class App extends Component {
   state = {
