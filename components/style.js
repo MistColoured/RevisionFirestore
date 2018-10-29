@@ -77,10 +77,13 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   button: {
-    backgroundColor: '#00bb00',
-    height: 80,
+    backgroundColor: '#00bb55',
+    height: 106,
     justifyContent: 'center',
-    fontSize: 26,
+  },
+  myText: {
+    fontSize: 20,
+    color: '#ffffff',
   }
 });
 

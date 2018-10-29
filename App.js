@@ -80,10 +80,10 @@ export default class App extends Component {
     return (
       <View
         style={{
-          height: 10,
-          width: "86%",
+          height: 2,
+          width: "100%",
           backgroundColor: "#CED0CE",
-          marginLeft: "14%"
+          // marginLeft: "14%"
         }}
       />
     );
@@ -128,12 +128,15 @@ export default class App extends Component {
               style={styles.button}
               onPress={() => { this.onPress(item._key) }}
             >
-              <Text> {item.todo} </Text>
+              <Text
+                style={styles.myText}>
+                {item.todo}
+              </Text>
             </TouchableHighlight>
           )}
           keyExtractor={item => item._key}
           ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
+          // ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
