@@ -9,6 +9,7 @@
 import React, { Component } from 'react';
 import { Text, View, FlatList, TouchableHighlight, YellowBox } from 'react-native';
 import { SearchBar } from "react-native-elements";
+import Swipeout from 'react-native-swipeout';
 import _ from 'lodash'
 
 import firebase, { auth, provider } from './components/firebase';
@@ -51,10 +52,8 @@ export default class App extends Component {
             todo: val.todo,
             _key: key,
           });
-          // console.log('Something', key)
         });
       }
-      // console.log('newState', newState)
       this.setState({
         todoList: newState,
         loading: false,
@@ -86,6 +85,7 @@ export default class App extends Component {
       <View>
         <TouchableHighlight
           style={styles.redButton}
+          underlayColor={'#ff0066'}
           onPress={() => this.backOneLevel()}
         >
           <Text
@@ -98,7 +98,7 @@ export default class App extends Component {
     );
   };
 
-  onPress = (_key) => {
+  onTodoPress = (_key) => {
     const { embedLevel } = this.state;
     this.setState({
       embedLevel: embedLevel.concat('/', _key),
@@ -120,6 +120,24 @@ export default class App extends Component {
 
   render() {
     const { todoList } = this.state;
+    const swipeSettings = {
+      autoClose: true,
+      right: [
+        {
+          onPress: () => {
+            alert.alert(
+              'Alert',
+              'Are you sure?',
+              [
+                { text: 'No', onPress: () => console.log('Cancel pressed'), style: 'cancel' },
+                { text: 'Yes', onPress: () => console.log('Yes!!'), style: 'cancel' }
+              ],
+              { cancelable: true }
+            )
+          }
+        }
+      ]
+    }
     return (
 
       <View>
@@ -130,15 +148,18 @@ export default class App extends Component {
             if (!item.todo) { return null; }
             else {
               return (
-                <TouchableHighlight
-                  style={styles.button}
-                  onPress={() => { this.onPress(item._key) }}
-                >
-                  <Text
-                    style={styles.myText}>
-                    {item.todo}
-                  </Text>
-                </TouchableHighlight>
+                <Swipeout {...swipeSettings}>
+                  <TouchableHighlight
+                    style={styles.button}
+                    underlayColor={'#00cc55'}
+                    onPress={() => { this.onTodoPress(item._key) }}
+                  >
+                    <Text
+                      style={styles.myText}>
+                      {item.todo}
+                    </Text>
+                  </TouchableHighlight>
+                </Swipeout>
               )
             }
           }}
