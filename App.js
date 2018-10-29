@@ -80,17 +80,20 @@ export default class App extends Component {
   };
 
   renderFooter = () => {
-    if (!this.state.loading) return null;
+    if (this.state.loading) return null;
 
     return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#ee1173"
-        }}
-      >
-        <ActivityIndicator animating size="large" />
+      <View>
+        <TouchableHighlight
+          style={styles.redButton}
+          onPress={() => this.backOneLevel()}
+        >
+          <Text
+            style={styles.myText}>
+            Up One Level
+              </Text>
+        </TouchableHighlight>
+        {/* <ActivityIndicator animating size="large" /> */}
       </View>
     );
   };
@@ -103,23 +106,42 @@ export default class App extends Component {
       () => this.listenForItems());
     console.log('Button pressed', _key)
   }
+
+  backOneLevel = () => {
+    const { embedLevel } = this.state;
+    if (embedLevel === '') { return; }
+    console.log('Up level');
+    const re = /.*(?=\/)/;
+    this.setState({
+      embedLevel: embedLevel.match(re)[0],
+    },
+      () => this.listenForItems());
+  }
+
   render() {
     const { todoList } = this.state;
     return (
+
       <View>
         <FlatList
           data={todoList}
-          renderItem={({ item }) => (
-            <TouchableHighlight
-              style={styles.button}
-              onPress={() => { this.onPress(item._key) }}
-            >
-              <Text
-                style={styles.myText}>
-                {item.todo}
-              </Text>
-            </TouchableHighlight>
-          )}
+          renderItem={({ item }) => {
+            console.log(item)
+            if (!item.todo) { return null; }
+            else {
+              return (
+                <TouchableHighlight
+                  style={styles.button}
+                  onPress={() => { this.onPress(item._key) }}
+                >
+                  <Text
+                    style={styles.myText}>
+                    {item.todo}
+                  </Text>
+                </TouchableHighlight>
+              )
+            }
+          }}
           keyExtractor={item => item._key}
           // ItemSeparatorComponent={this.renderSeparator}
           // ListHeaderComponent={this.renderHeader}
