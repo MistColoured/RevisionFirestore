@@ -4,7 +4,12 @@ import { Text, FlatList, TouchableHighlight } from "react-native";
 import TodoItem from "./TodoItem";
 import UpOneLevelButton from "./UpOneLevelButton";
 
-const TodoList = ({ handleClickTodo, handleUpOneLevelButton, todoList }) => (
+const TodoList = ({
+  handleClickTodo,
+  handleUpOneLevelButton,
+  todoList,
+  embedLevel
+}) => (
   <FlatList
     data={todoList}
     renderItem={({ item }) => {
@@ -14,7 +19,9 @@ const TodoList = ({ handleClickTodo, handleUpOneLevelButton, todoList }) => (
     }}
     keyExtractor={item => item._key}
     ListFooterComponent={
-      <UpOneLevelButton handleUpOneLevelButton={handleUpOneLevelButton} />
+      embedLevel ? (
+        <UpOneLevelButton handleUpOneLevelButton={handleUpOneLevelButton} />
+      ) : null
     }
   />
 );

@@ -7,13 +7,13 @@
  */
 
 import React, { Component } from "react";
-import { Text, View, YellowBox } from "react-native";
+import { Text, View, YellowBox, TouchableOpacity } from "react-native";
 import _ from "lodash";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import firebase, { auth, provider } from "./components/firebase";
 
 import TodoList from "./components/TodoList";
-import UpOneLevelButton from "./components/UpOneLevelButton";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -91,12 +91,10 @@ export default class App extends Component {
   };
 
   handleUpOneLevel = () => {
-    console.log("Clickly");
     const { embedLevel } = this.state;
     if (embedLevel === "") {
       return;
     }
-    console.log("Up level");
     const re = /.*(?=\/)/;
     this.setState(
       {
@@ -107,16 +105,29 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoList } = this.state;
-    console.table(todoList);
+    const { todoList, embedLevel } = this.state;
     return (
       <View>
         <TodoList
           todoList={todoList}
           handleUpOneLevelButton={this.handleUpOneLevel}
           handleClickTodo={this.handleClickTodo}
+          embedLevel={embedLevel}
         />
-        {/* <UpOneLevelButton handleUpOneLevel={this.handleUpOneLevel} /> */}
+        <TouchableOpacity
+          style={{
+            borderWidth: 1,
+            borderColor: "rgba(0,0,0,0.2)",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 100,
+            height: 100,
+            backgroundColor: "#fff",
+            borderRadius: 100
+          }}
+        >
+          <Icon name={"chevron-right"} size={30} color="#01a699" />
+        </TouchableOpacity>
       </View>
     );
   }
