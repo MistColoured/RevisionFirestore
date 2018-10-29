@@ -7,8 +7,8 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableHighlight, YellowBox } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { Text, View, FlatList, TouchableHighlight, YellowBox } from 'react-native';
+import { SearchBar } from "react-native-elements";
 import _ from 'lodash'
 
 import firebase, { auth, provider } from './components/firebase';
@@ -31,10 +31,8 @@ export default class App extends Component {
     // user: null,
     user: { uid: '2QfgNSNHwGQi1W53lYORVmn65l53' },
     error: null,
-    refreshing: false,
     embedLevel: '',
   }
-
   componentDidMount = () => {
     this.listenForItems()
   }
@@ -53,28 +51,16 @@ export default class App extends Component {
             todo: val.todo,
             _key: key,
           });
-          console.log('Something', key)
+          // console.log('Something', key)
         });
       }
-      console.log('newState', newState)
+      // console.log('newState', newState)
       this.setState({
         todoList: newState,
         loading: false,
       });
     });
   }
-  handleRefresh = () => {
-    this.setState(
-      {
-        refreshing: true
-      },
-      () => {
-        const { uid } = this.state.user
-        const eventRef = firebase.database().ref(`users/${uid}/todoList`);
-        this.listenForItems(eventRef)
-      }
-    );
-  };
 
   renderSeparator = () => {
     return (
@@ -82,7 +68,7 @@ export default class App extends Component {
         style={{
           height: 2,
           width: "100%",
-          backgroundColor: "#CED0CE",
+          backgroundColor: "#fff",
           // marginLeft: "14%"
         }}
       />
@@ -135,13 +121,9 @@ export default class App extends Component {
             </TouchableHighlight>
           )}
           keyExtractor={item => item._key}
-          ItemSeparatorComponent={this.renderSeparator}
+          // ItemSeparatorComponent={this.renderSeparator}
           // ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-          // onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={50}
         />
       </View>
     );
