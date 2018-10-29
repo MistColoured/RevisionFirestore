@@ -3,11 +3,11 @@ import { Text, TouchableHighlight } from "react-native";
 
 import styles from "./style";
 
-const UpOneLevelButton = ({ handleUpOneLevel }) => (
+const UpOneLevelButton = ({ handleUpOneLevelButton }) => (
   <TouchableHighlight
     style={styles.redButton}
     underlayColor={"#ff0066"}
-    onPress={handleUpOneLevel}
+    onPress={handleUpOneLevelButton}
   >
     <Text style={styles.myText}>Up One Level</Text>
   </TouchableHighlight>

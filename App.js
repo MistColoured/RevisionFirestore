@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from "react";
-import { View, YellowBox } from "react-native";
+import { Text, View, YellowBox } from "react-native";
 import _ from "lodash";
 
 import firebase, { auth, provider } from "./components/firebase";
@@ -26,7 +26,6 @@ console.warn = message => {
 export default class App extends Component {
   state = {
     todoList: [],
-    todo: "",
     loading: false,
     // user: null,
     user: { uid: "2QfgNSNHwGQi1W53lYORVmn65l53" },
@@ -92,6 +91,7 @@ export default class App extends Component {
   };
 
   handleUpOneLevel = () => {
+    console.log("Clickly");
     const { embedLevel } = this.state;
     if (embedLevel === "") {
       return;
@@ -108,10 +108,15 @@ export default class App extends Component {
 
   render() {
     const { todoList } = this.state;
+    console.table(todoList);
     return (
       <View>
-        <TodoList todoList={todoList} handleClickTodo={this.handleClickTodo} />
-        <UpOneLevelButton handleUpOneLevel={this.handleUpOneLevel} />
+        <TodoList
+          todoList={todoList}
+          handleUpOneLevelButton={this.handleUpOneLevel}
+          handleClickTodo={this.handleClickTodo}
+        />
+        {/* <UpOneLevelButton handleUpOneLevel={this.handleUpOneLevel} /> */}
       </View>
     );
   }

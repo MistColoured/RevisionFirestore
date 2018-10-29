@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Text, FlatList, TouchableHighlight } from "react-native";
 
 import TodoItem from "./TodoItem";
+import UpOneLevelButton from "./UpOneLevelButton";
 
-const TodoList = ({ handleClickTodo, todoList }) => (
+const TodoList = ({ handleClickTodo, handleUpOneLevelButton, todoList }) => (
   <FlatList
     data={todoList}
     renderItem={({ item }) => {
@@ -12,7 +13,9 @@ const TodoList = ({ handleClickTodo, todoList }) => (
       ) : null;
     }}
     keyExtractor={item => item._key}
-    ListFooterComponent={this.renderFooter}
+    ListFooterComponent={
+      <UpOneLevelButton handleUpOneLevelButton={handleUpOneLevelButton} />
+    }
   />
 );
 
