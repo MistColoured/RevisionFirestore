@@ -80,6 +80,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#00bb55',
     height: 106,
     justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff'
+  },
+  redButton: {
+    backgroundColor: '#ff0055',
+    height: 106,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#fff'
   },
   myText: {
     fontSize: 20,
