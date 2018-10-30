@@ -100,9 +100,19 @@ const styles = StyleSheet.create({
   todoInput: {
     height: 44,
     width: 300,
+    textAlign: "center",
     borderColor: "gray",
     borderWidth: 3,
-    borderRadius: 22
+    borderRadius: 22,
+    position: "relative"
+  },
+  addTodoButton: {
+    backgroundColor: "#fff",
+    height: 106,
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff"
   }
 });
 

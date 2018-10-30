@@ -12,7 +12,7 @@ import _ from "lodash";
 import firebase, { auth, provider } from "./components/firebase";
 import TodoList from "./components/TodoList";
 import AddTodoButton from "./components/AddTodoButton";
-import styles from "./components/style";
+import TodoInput from "./components/TodoInput";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -26,6 +26,7 @@ export default class App extends Component {
   state = {
     todoList: [],
     loading: false,
+    showTextInput: false,
     text: "",
     // user: null,
     user: { uid: "2QfgNSNHwGQi1W53lYORVmn65l53" },
@@ -65,6 +66,10 @@ export default class App extends Component {
 
   handleAddTodo = () => {
     console.log("Add a todo");
+    this.setState({ showTextInput: true });
+  };
+  handleToggleInput = () => {
+    this.setState({ showTextInput: true });
   };
 
   handleDeleteTodo = id => {
@@ -123,7 +128,8 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoList, embedLevel, loading, text } = this.state;
+    const { todoList, embedLevel, loading, showTextInput } = this.state;
+    console.log("Render");
     return (
       <View>
         {loading ? (
@@ -139,16 +145,11 @@ export default class App extends Component {
               handleUpOneLevelButton={this.handleUpOneLevel}
               handleClickTodo={this.handleClickTodo}
               handleDeleteTodo={this.handleDeleteTodo}
+              handleAddTodo={this.handleAddTodo}
               embedLevel={embedLevel}
+              showTextInput={showTextInput}
             />
-            <AddTodoButton handleAddTodo={this.handleAddTodo} />
-            {/* <TextInput
-              maxLength={10}
-              style={styles.todoInput}
-              placeholder={"I am placeholder text"}
-              onChangeText={text => this.setState({ text })}
-              value={text}
-            /> */}
+            <AddTodoButton handleToggleInput={this.handleToggleInput} />
           </View>
         )}
       </View>

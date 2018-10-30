@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-import { Text, FlatList, TouchableHighlight } from "react-native";
+import { Text, FlatList, TouchableHighlight, ScrollView } from "react-native";
 
 import TodoItem from "./TodoItem";
 import UpOneLevelButton from "./UpOneLevelButton";
+import TodoInputButton from "./TodoInputButton";
 
 const TodoList = ({
   handleClickTodo,
   handleDeleteTodo,
+  handleAddTodo,
   handleUpOneLevelButton,
   todoList,
-  embedLevel
+  embedLevel,
+  showTextInput
 }) => (
   <FlatList
     data={todoList}
+    scrollToEnd={true}
     renderItem={({ item }) => {
       return item.todo ? (
         <TodoItem
@@ -24,7 +28,9 @@ const TodoList = ({
     }}
     keyExtractor={item => item._key}
     ListFooterComponent={
-      embedLevel ? (
+      showTextInput ? (
+        <TodoInputButton handleAddTodo={handleAddTodo} />
+      ) : embedLevel ? (
         <UpOneLevelButton handleUpOneLevelButton={handleUpOneLevelButton} />
       ) : null
     }
