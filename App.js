@@ -16,9 +16,7 @@ import {
 } from "react-native";
 import _ from "lodash";
 import Icon from "react-native-vector-icons/FontAwesome";
-
 import firebase, { auth, provider } from "./components/firebase";
-
 import TodoList from "./components/TodoList";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -67,6 +65,22 @@ export default class App extends Component {
         loading: false
       });
     });
+  };
+
+  handleAddTodo = () => {
+    console.log("Add a todo");
+  };
+
+  handleDeleteTodo = id => {
+    const {
+      user: { uid },
+      embedLevel
+    } = this.state;
+    const deleteRef = firebase
+      .database()
+      .ref(`users/${uid}/todoList/${embedLevel}/${id}`);
+    deleteRef.remove();
+    // console.log("Delete a todo", id);
   };
 
   renderSeparator = () => {
@@ -120,27 +134,36 @@ export default class App extends Component {
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          <View>
+          <View
+            style={{
+              minHeight: "100%"
+            }}
+          >
             <TodoList
               todoList={todoList}
               handleUpOneLevelButton={this.handleUpOneLevel}
               handleClickTodo={this.handleClickTodo}
+              handleDeleteTodo={this.handleDeleteTodo}
               embedLevel={embedLevel}
             />
-            {/* <TouchableOpacity
+            <TouchableOpacity
               style={{
                 borderWidth: 1,
                 borderColor: "rgba(0,0,0,0.2)",
                 alignItems: "center",
                 justifyContent: "center",
-                width: 100,
-                height: 100,
-                backgroundColor: "#fff",
-                borderRadius: 100
+                width: 60,
+                height: 60,
+                backgroundColor: "#19f",
+                borderRadius: 100,
+                position: "absolute",
+                bottom: 10,
+                right: 10
               }}
+              onPress={this.handleAddTodo}
             >
-              <Icon name={"chevron-right"} size={30} color="#01a699" />
-            </TouchableOpacity> */}
+              <Icon name={"plus"} size={20} color="#fff" />
+            </TouchableOpacity>
           </View>
         )}
       </View>

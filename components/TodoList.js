@@ -6,6 +6,7 @@ import UpOneLevelButton from "./UpOneLevelButton";
 
 const TodoList = ({
   handleClickTodo,
+  handleDeleteTodo,
   handleUpOneLevelButton,
   todoList,
   embedLevel
@@ -14,7 +15,11 @@ const TodoList = ({
     data={todoList}
     renderItem={({ item }) => {
       return item.todo ? (
-        <TodoItem item={item} handleClickTodo={handleClickTodo} />
+        <TodoItem
+          item={item}
+          handleClickTodo={handleClickTodo}
+          handleDeleteTodo={handleDeleteTodo}
+        />
       ) : null;
     }}
     keyExtractor={item => item._key}

@@ -1,17 +1,40 @@
 import React from "react";
 import { Text, TouchableHighlight } from "react-native";
-
+import Swipeout from "react-native-swipeout";
 import styles from "./style";
 
-const TodoItem = ({ handleClickTodo, item: { _key, todo } }) => (
-  <TouchableHighlight
-    style={styles.button}
-    underlayColor={"#00cc55"}
-    onPress={() => handleClickTodo(_key)}
-  >
-    <Text style={styles.myText}>{todo}</Text>
-  </TouchableHighlight>
-);
+const TodoItem = ({
+  handleClickTodo,
+  handleDeleteTodo,
+  item: { _key, todo }
+}) => {
+  const swipeSettings = {
+    autoClose: true,
+    onOpen: (secId, rowId, direction, id) => {
+      console.log("Hello", id);
+    },
+    right: [
+      {
+        text: "zztopst",
+        onPress: () => {
+          console.log("rocks");
+          handleDeleteTodo(_key);
+        }
+      }
+    ]
+  };
+  return (
+    <Swipeout {...swipeSettings}>
+      <TouchableHighlight
+        style={styles.button}
+        underlayColor={"#00cc55"}
+        onPress={() => handleClickTodo(_key)}
+      >
+        <Text style={styles.myText}>{todo}</Text>
+      </TouchableHighlight>
+    </Swipeout>
+  );
+};
 
 export default TodoItem;
 
@@ -34,11 +57,4 @@ export default TodoItem;
 //       }
 //     }
 //   ]
-// }
-//   return (
-
-//     <Swipeout id={27} {...swipeSettings}>
-
-//     </Swipeout>
-//   );
 // }
