@@ -7,17 +7,12 @@
  */
 
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  YellowBox,
-  TouchableOpacity,
-  ActivityIndicator
-} from "react-native";
+import { View, YellowBox, ActivityIndicator, TextInput } from "react-native";
 import _ from "lodash";
-import Icon from "react-native-vector-icons/FontAwesome";
 import firebase, { auth, provider } from "./components/firebase";
 import TodoList from "./components/TodoList";
+import AddTodoButton from "./components/AddTodoButton";
+import styles from "./components/style";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -31,6 +26,7 @@ export default class App extends Component {
   state = {
     todoList: [],
     loading: false,
+    text: "",
     // user: null,
     user: { uid: "2QfgNSNHwGQi1W53lYORVmn65l53" },
     error: null,
@@ -80,7 +76,6 @@ export default class App extends Component {
       .database()
       .ref(`users/${uid}/todoList/${embedLevel}/${id}`);
     deleteRef.remove();
-    // console.log("Delete a todo", id);
   };
 
   renderSeparator = () => {
@@ -128,7 +123,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoList, embedLevel, loading } = this.state;
+    const { todoList, embedLevel, loading, text } = this.state;
     return (
       <View>
         {loading ? (
@@ -146,24 +141,14 @@ export default class App extends Component {
               handleDeleteTodo={this.handleDeleteTodo}
               embedLevel={embedLevel}
             />
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "rgba(0,0,0,0.2)",
-                alignItems: "center",
-                justifyContent: "center",
-                width: 60,
-                height: 60,
-                backgroundColor: "#19f",
-                borderRadius: 100,
-                position: "absolute",
-                bottom: 10,
-                right: 10
-              }}
-              onPress={this.handleAddTodo}
-            >
-              <Icon name={"plus"} size={20} color="#fff" />
-            </TouchableOpacity>
+            <AddTodoButton handleAddTodo={this.handleAddTodo} />
+            {/* <TextInput
+              maxLength={10}
+              style={styles.todoInput}
+              placeholder={"I am placeholder text"}
+              onChangeText={text => this.setState({ text })}
+              value={text}
+            /> */}
           </View>
         )}
       </View>
