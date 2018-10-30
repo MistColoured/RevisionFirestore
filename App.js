@@ -7,7 +7,13 @@
  */
 
 import React, { Component } from "react";
-import { Text, View, YellowBox, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  YellowBox,
+  TouchableOpacity,
+  ActivityIndicator
+} from "react-native";
 import _ from "lodash";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -79,6 +85,9 @@ export default class App extends Component {
   renderHeader = () => {
     return <SearchBar placeholder="Type Here..." lightTheme round />;
   };
+  renderLoading = () => {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  };
 
   handleClickTodo = _key => {
     const { embedLevel } = this.state;
@@ -105,29 +114,35 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoList, embedLevel } = this.state;
+    const { todoList, embedLevel, loading } = this.state;
     return (
       <View>
-        <TodoList
-          todoList={todoList}
-          handleUpOneLevelButton={this.handleUpOneLevel}
-          handleClickTodo={this.handleClickTodo}
-          embedLevel={embedLevel}
-        />
-        <TouchableOpacity
-          style={{
-            borderWidth: 1,
-            borderColor: "rgba(0,0,0,0.2)",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 100,
-            height: 100,
-            backgroundColor: "#fff",
-            borderRadius: 100
-          }}
-        >
-          <Icon name={"chevron-right"} size={30} color="#01a699" />
-        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <View>
+            <TodoList
+              todoList={todoList}
+              handleUpOneLevelButton={this.handleUpOneLevel}
+              handleClickTodo={this.handleClickTodo}
+              embedLevel={embedLevel}
+            />
+            {/* <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "rgba(0,0,0,0.2)",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 100,
+                height: 100,
+                backgroundColor: "#fff",
+                borderRadius: 100
+              }}
+            >
+              <Icon name={"chevron-right"} size={30} color="#01a699" />
+            </TouchableOpacity> */}
+          </View>
+        )}
       </View>
     );
   }
