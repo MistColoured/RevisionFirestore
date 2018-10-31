@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const AddTodoButton = ({ handleAddTodo }) => (
+const RoundAddButton = ({ handleToggleKeyboard }) => (
   <TouchableOpacity
     style={{
       borderWidth: 1,
@@ -17,10 +17,10 @@ const AddTodoButton = ({ handleAddTodo }) => (
       bottom: 10,
       right: 10
     }}
-    onPress={handleAddTodo}
+    onPress={handleToggleKeyboard}
   >
     <Icon name={"plus"} size={20} color="#fff" />
   </TouchableOpacity>
 );
 
-export default AddTodoButton;
+export default RoundAddButton;

@@ -12,7 +12,7 @@ const TodoList = ({
   handleUpOneLevelButton,
   todoList,
   embedLevel,
-  showTextInput
+  showKeyboard
 }) => (
   <FlatList
     data={todoList}
@@ -28,7 +28,7 @@ const TodoList = ({
     }}
     keyExtractor={item => item._key}
     ListFooterComponent={
-      showTextInput ? (
+      showKeyboard ? (
         <TodoInputButton handleAddTodo={handleAddTodo} />
       ) : embedLevel ? (
         <UpOneLevelButton handleUpOneLevelButton={handleUpOneLevelButton} />

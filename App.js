@@ -11,8 +11,8 @@ import { View, YellowBox, ActivityIndicator, TextInput } from "react-native";
 import _ from "lodash";
 import firebase, { auth, provider } from "./components/firebase";
 import TodoList from "./components/TodoList";
-import AddTodoButton from "./components/AddTodoButton";
-import TodoInput from "./components/TodoInput";
+import AddTodoButton from "./components/RoundAddButton";
+import RoundAddButton from "./components/RoundAddButton";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -26,7 +26,7 @@ export default class App extends Component {
   state = {
     todoList: [],
     loading: false,
-    showTextInput: false,
+    showKeyboard: false,
     text: "",
     // user: null,
     user: { uid: "2QfgNSNHwGQi1W53lYORVmn65l53" },
@@ -64,12 +64,31 @@ export default class App extends Component {
     });
   };
 
-  handleAddTodo = () => {
-    console.log("Add a todo");
-    this.setState({ showTextInput: true });
+  handleAddTodo = addTodoText => {
+    const {
+      user: { uid },
+      embedLevel
+    } = this.state;
+    const postKey = firebase
+      .database()
+      .ref(`users/${uid}/todoList${embedLevel}`)
+      .push().key;
+    const postObject = {
+      todo: addTodoText
+    };
+    const todoWrapper = {};
+    todoWrapper[postKey] = postObject;
+
+    firebase
+      .database()
+      .ref(`users/${uid}/todoList/${embedLevel}`)
+      .update(todoWrapper);
+    this.setState({ showKeyboard: false });
   };
-  handleToggleInput = () => {
-    this.setState({ showTextInput: true });
+
+  handleToggleKeyboard = () => {
+    console.log("Toggle keyboard");
+    this.setState({ showKeyboard: true });
   };
 
   handleDeleteTodo = id => {
@@ -128,7 +147,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoList, embedLevel, loading, showTextInput } = this.state;
+    const { todoList, embedLevel, loading, showKeyboard } = this.state;
     console.log("Render");
     return (
       <View>
@@ -147,9 +166,9 @@ export default class App extends Component {
               handleDeleteTodo={this.handleDeleteTodo}
               handleAddTodo={this.handleAddTodo}
               embedLevel={embedLevel}
-              showTextInput={showTextInput}
+              showKeyboard={showKeyboard}
             />
-            <AddTodoButton handleToggleInput={this.handleToggleInput} />
+            <RoundAddButton handleToggleKeyboard={this.handleToggleKeyboard} />
           </View>
         )}
       </View>

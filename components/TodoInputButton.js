@@ -1,25 +1,30 @@
-import React from "react";
+import React, { Component } from "react";
 import { Text, TouchableHighlight, TextInput } from "react-native";
 
 import styles from "./style";
 
-const TodoInputButton = ({ handleAddTodo }) => (
-  <TouchableHighlight
-    style={styles.addTodoButton}
-    underlayColor={"#ffee00"}
-    // onPress={handleUpOneLevelButton}
-  >
-    <TextInput
-      maxLength={10}
-      autoFocus={true}
-      style={styles.todoInput}
-      placeholder={"I am placeholder text"}
-      onBlur={() => console.log("Blurred")}
-      onSubmitEditing={handleAddTodo}
-      // onChangeText={text => this.setState({ text })}
-      // value={text}
-    />
-  </TouchableHighlight>
-);
-
-export default TodoInputButton;
+export default class TodoInputButton extends Component {
+  state = {
+    addTodoText: ""
+  };
+  render() {
+    const { handleAddTodo } = this.props;
+    const { addTodoText } = this.state;
+    return (
+      <TouchableHighlight
+        style={styles.addTodoButton}
+        underlayColor={"#ffee00"}
+      >
+        <TextInput
+          maxLength={10}
+          autoFocus={true}
+          style={styles.todoInput}
+          placeholder={"I am placeholder text"}
+          onBlur={() => handleAddTodo(addTodoText)}
+          onChangeText={addTodoText => this.setState({ addTodoText })}
+          value={addTodoText}
+        />
+      </TouchableHighlight>
+    );
+  }
+}
