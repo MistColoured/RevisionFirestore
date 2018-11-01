@@ -11,8 +11,8 @@ import { View, YellowBox, ActivityIndicator, TextInput } from "react-native";
 import _ from "lodash";
 import firebase, { auth, provider } from "./components/firebase";
 import TodoList from "./components/TodoList";
-import AddTodoButton from "./components/RoundAddButton";
 import RoundAddButton from "./components/RoundAddButton";
+import Loader from "./components/Loader";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -21,6 +21,12 @@ console.warn = message => {
     _console.warn(message);
   }
 };
+console.ignoredYellowBox = ["Setting a timer"];
+
+// type AppState = {
+//   count: number,
+//   loading: boolean
+// };
 
 export default class App extends Component {
   state = {
@@ -47,6 +53,7 @@ export default class App extends Component {
 
     this.setState({ loading: true });
     todoRef.on("value", snapshot => {
+      console.log("Loading data...");
       const newState = [];
       if (snapshot.exists()) {
         const items = snapshot.val();
@@ -61,6 +68,7 @@ export default class App extends Component {
         todoList: newState,
         loading: false
       });
+      console.log("...Data loaded");
     });
   };
 
@@ -152,7 +160,7 @@ export default class App extends Component {
     return (
       <View>
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <Loader loading={loading} />
         ) : (
           <View
             style={{
@@ -168,7 +176,11 @@ export default class App extends Component {
               embedLevel={embedLevel}
               showKeyboard={showKeyboard}
             />
-            <RoundAddButton handleToggleKeyboard={this.handleToggleKeyboard} />
+            {!showKeyboard ? (
+              <RoundAddButton
+                handleToggleKeyboard={this.handleToggleKeyboard}
+              />
+            ) : null}
           </View>
         )}
       </View>

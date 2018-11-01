@@ -16,7 +16,7 @@ export default class TodoInputButton extends Component {
         underlayColor={"#ffee00"}
       >
         <TextInput
-          maxLength={10}
+          maxLength={32}
           autoFocus={true}
           style={styles.todoInput}
           placeholder={"I am placeholder text"}
