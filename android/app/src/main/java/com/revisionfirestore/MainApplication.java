@@ -1,4 +1,4 @@
-package com.revisionfirebase;
+package com.revisionfirestore;
 
 import android.app.Application;
 

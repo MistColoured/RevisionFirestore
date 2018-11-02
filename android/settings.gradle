@@ -1,3 +1,3 @@
-rootProject.name = 'RevisionFirebase'
+rootProject.name = 'RevisionFirestore'
 
 include ':app'
