@@ -1,4 +1,4 @@
-package com.firebase;
+package com.revisionfirebase;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "Firebase";
+        return "RevisionFirebase";
     }
 }

@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "Firebase-tvOS.app"
-               BlueprintName = "Firebase-tvOS"
-               ReferencedContainer = "container:Firebase.xcodeproj">
+               BuildableName = "RevisionFirebase-tvOS.app"
+               BlueprintName = "RevisionFirebase-tvOS"
+               ReferencedContainer = "container:RevisionFirebase.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "Firebase-tvOSTests.xctest"
-               BlueprintName = "Firebase-tvOSTests"
-               ReferencedContainer = "container:Firebase.xcodeproj">
+               BuildableName = "RevisionFirebase-tvOSTests.xctest"
+               BlueprintName = "RevisionFirebase-tvOSTests"
+               ReferencedContainer = "container:RevisionFirebase.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "Firebase-tvOSTests.xctest"
-               BlueprintName = "Firebase-tvOSTests"
-               ReferencedContainer = "container:Firebase.xcodeproj">
+               BuildableName = "RevisionFirebase-tvOSTests.xctest"
+               BlueprintName = "RevisionFirebase-tvOSTests"
+               ReferencedContainer = "container:RevisionFirebase.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "Firebase-tvOS.app"
-            BlueprintName = "Firebase-tvOS"
-            ReferencedContainer = "container:Firebase.xcodeproj">
+            BuildableName = "RevisionFirebase-tvOS.app"
+            BlueprintName = "RevisionFirebase-tvOS"
+            ReferencedContainer = "container:RevisionFirebase.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "Firebase-tvOS.app"
-            BlueprintName = "Firebase-tvOS"
-            ReferencedContainer = "container:Firebase.xcodeproj">
+            BuildableName = "RevisionFirebase-tvOS.app"
+            BlueprintName = "RevisionFirebase-tvOS"
+            ReferencedContainer = "container:RevisionFirebase.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "Firebase-tvOS.app"
-            BlueprintName = "Firebase-tvOS"
-            ReferencedContainer = "container:Firebase.xcodeproj">
+            BuildableName = "RevisionFirebase-tvOS.app"
+            BlueprintName = "RevisionFirebase-tvOS"
+            ReferencedContainer = "container:RevisionFirebase.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
