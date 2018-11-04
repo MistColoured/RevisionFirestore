@@ -7,30 +7,15 @@
  */
 
 import React, { Component } from "react";
-import { View, YellowBox, ActivityIndicator, TextInput } from "react-native";
-import _ from "lodash";
-import firebase, { auth, provider } from "./components/firebase";
-import TodoList from "./components/TodoList";
+import { View, ActivityIndicator } from "react-native";
+import db, { auth, provider, serverTimestamp } from "./components/firebase";
+import RevisionList from "./components/RevisionList";
 import RoundAddButton from "./components/RoundAddButton";
 import Loader from "./components/Loader";
 
-YellowBox.ignoreWarnings(["Setting a timer"]);
-const _console = _.clone(console);
-console.warn = message => {
-  if (message.indexOf("Setting a timer") <= -1) {
-    _console.warn(message);
-  }
-};
-console.ignoredYellowBox = ["Setting a timer"];
-
-// type AppState = {
-//   count: number,
-//   loading: boolean
-// };
-
 export default class App extends Component {
   state = {
-    todoList: [],
+    revisionList: [],
     loading: false,
     showKeyboard: false,
     text: "",
@@ -46,51 +31,60 @@ export default class App extends Component {
   };
 
   listenForItems = () => {
-    const { user, embedLevel } = this.state;
-    const todoRef = firebase
-      .database()
-      .ref(`users/${user.uid}/todoList/${embedLevel}`);
-
-    this.setState({ loading: true });
-    todoRef.on("value", snapshot => {
-      console.log("Loading data...");
-      const newState = [];
-      if (snapshot.exists()) {
-        const items = snapshot.val();
-        Object.entries(items).forEach(([key, val]) => {
-          newState.push({
-            todo: val.todo,
-            _key: key
-          });
+    db.collection("RevisionFirestore")
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
         });
-      }
-      this.setState({
-        todoList: newState,
-        loading: false
       });
-      console.log("...Data loaded");
-    });
+
+    // const { user, embedLevel } = this.state;
+    // const revisionRef = firebase
+    //   .database()
+    //   .ref(`users/${user.uid}/revisionList/${embedLevel}`);
+
+    // this.setState({ loading: true });
+    // revisionRef.on("value", snapshot => {
+    //   console.log("Loading data...");
+    //   const newState = [];
+    //   if (snapshot.exists()) {
+    //     const items = snapshot.val();
+    //     Object.entries(items).forEach(([key, val]) => {
+    //       newState.push({
+    //         revision: val.revision,
+    //         _key: key
+    //       });
+    //     });
+    //   }
+    //   this.setState({
+    //     revisionList: newState,
+    //     loading: false
+    //   });
+    //   console.log("...Data loaded");
+    // });
   };
 
-  handleAddTodo = addTodoText => {
+  handleAddRevision = addRevisionText => {
     const {
       user: { uid },
       embedLevel
     } = this.state;
     const postKey = firebase
       .database()
-      .ref(`users/${uid}/todoList${embedLevel}`)
+      .ref(`users/${uid}/revisionList${embedLevel}`)
       .push().key;
     const postObject = {
-      todo: addTodoText
+      revision: addRevisionText
     };
-    const todoWrapper = {};
-    todoWrapper[postKey] = postObject;
+    const revisionWrapper = {};
+    revisionWrapper[postKey] = postObject;
 
     firebase
       .database()
-      .ref(`users/${uid}/todoList/${embedLevel}`)
-      .update(todoWrapper);
+      .ref(`users/${uid}/revisionList/${embedLevel}`)
+      .update(revisionWrapper);
     this.setState({ showKeyboard: false });
   };
 
@@ -99,14 +93,14 @@ export default class App extends Component {
     this.setState({ showKeyboard: true });
   };
 
-  handleDeleteTodo = id => {
+  handleDeleteRevision = id => {
     const {
       user: { uid },
       embedLevel
     } = this.state;
     const deleteRef = firebase
       .database()
-      .ref(`users/${uid}/todoList/${embedLevel}/${id}`);
+      .ref(`users/${uid}/revisionList/${embedLevel}/${id}`);
     deleteRef.remove();
   };
 
@@ -130,7 +124,7 @@ export default class App extends Component {
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
-  handleClickTodo = _key => {
+  handleClickRevision = _key => {
     const { embedLevel } = this.state;
     this.setState(
       {
@@ -155,7 +149,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoList, embedLevel, loading, showKeyboard } = this.state;
+    const { revisionList, embedLevel, loading, showKeyboard } = this.state;
     console.log("Render");
     return (
       <View>
@@ -167,12 +161,12 @@ export default class App extends Component {
               minHeight: "100%"
             }}
           >
-            <TodoList
-              todoList={todoList}
+            <RevisionList
+              revisionList={revisionList}
               handleUpOneLevelButton={this.handleUpOneLevel}
-              handleClickTodo={this.handleClickTodo}
-              handleDeleteTodo={this.handleDeleteTodo}
-              handleAddTodo={this.handleAddTodo}
+              handleClickRevision={this.handleClickRevision}
+              handleDeleteRevision={this.handleDeleteRevision}
+              handleAddRevision={this.handleAddRevision}
               embedLevel={embedLevel}
               showKeyboard={showKeyboard}
             />

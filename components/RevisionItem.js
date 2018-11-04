@@ -3,10 +3,10 @@ import { Text, TouchableHighlight } from "react-native";
 import Swipeout from "react-native-swipeout";
 import styles from "./style";
 
-const TodoItem = ({
-  handleClickTodo,
-  handleDeleteTodo,
-  item: { _key, todo }
+const RevisionItem = ({
+  handleClickRevision,
+  handleDeleteRevision,
+  item: { _key, revision }
 }) => {
   const swipeSettings = {
     autoClose: true,
@@ -18,7 +18,7 @@ const TodoItem = ({
         text: "zztopst",
         onPress: () => {
           console.log("rocks");
-          handleDeleteTodo(_key);
+          handleDeleteRevision(_key);
         }
       }
     ]
@@ -28,15 +28,15 @@ const TodoItem = ({
       <TouchableHighlight
         style={styles.button}
         underlayColor={"#00cc55"}
-        onPress={() => handleClickTodo(_key)}
+        onPress={() => handleClickRevision(_key)}
       >
-        <Text style={styles.myText}>{todo}</Text>
+        <Text style={styles.myText}>{revision}</Text>
       </TouchableHighlight>
     </Swipeout>
   );
 };
 
-export default TodoItem;
+export default RevisionItem;
 
 // let swipeBtns = [{
 //   text: 'Delete',
