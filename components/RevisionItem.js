@@ -6,31 +6,17 @@ import styles from "./style";
 const RevisionItem = ({
   handleClickRevision,
   handleDeleteRevision,
-  item: { _key, revision, timestamp },
-  item
+  item: { _key, revision }
 }) => {
-  // console.log(
-  //   "timestamp object",
-  //   timestamp
-  //     .toDate()
-  //     .toISOString()
-  //     .substr(11, 8)
-  // );
-  // const showTimestamp = timestamp
-  //   .toDate()
-  //   .toISOString()
-  //   .substr(11, 8);
-  // console.log("Item: ", item);
   const swipeSettings = {
     autoClose: true,
     onOpen: (secId, rowId, direction, id) => {
-      // console.log("Hello", id);
+      console.log("Delete slider", id);
     },
     right: [
       {
-        text: "zztopst",
+        text: "Delete",
         onPress: () => {
-          console.log("rocks");
           handleDeleteRevision(_key);
         }
       }

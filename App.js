@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, Dimensions } from "react-native";
 import db, { auth, provider, serverTimestamp } from "./components/firebase";
 import RevisionList from "./components/RevisionList";
 import RoundAddButton from "./components/RoundAddButton";
@@ -27,12 +27,11 @@ export default class App extends Component {
   };
 
   componentDidMount = () => {
-    const { embedLevel } = this.state;
-    this.loadRevisionData(embedLevel);
+    this.loadRevisionData();
     // this.setDummyData();
   };
 
-  loadRevisionData = embedLevel => {
+  loadRevisionData = (embedLevel = "") => {
     db.collection(`RevisionFirestore${embedLevel}`)
       .get()
       .then(querySnapshot => {
@@ -105,15 +104,18 @@ export default class App extends Component {
   };
 
   handleDeleteRevision = id => {
+    const { embedLevel } = this.state;
     console.log("Delete something", id);
-    // const {
-    //   user: { uid },
-    //   embedLevel
-    // } = this.state;
-    // const deleteRef = firebase
-    //   .database()
-    //   .ref(`users/${uid}/revisionList/${embedLevel}/${id}`);
-    // deleteRef.remove();
+    db.collection(`RevisionFirestore${embedLevel}`)
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+        this.loadRevisionData(embedLevel);
+      })
+      .catch(function(error) {
+        console.error("Error removing document: ", error);
+      });
   };
 
   renderSeparator = () => {

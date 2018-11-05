@@ -1,8 +1,18 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 // import { relative } from "path";
 
+const { height, width } = Dimensions.get("window");
+console.log("From the stylesheet", height, width);
+
 const constants = {
-  actionColor: "#24CE84"
+  actionColor: "#24CE84",
+  buttons: {
+    height: height / 8,
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff"
+  }
 };
 
 const styles = StyleSheet.create({
@@ -78,20 +88,16 @@ const styles = StyleSheet.create({
     paddingBottom: 16
   },
   button: {
-    backgroundColor: "#00bb55",
-    height: 106,
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff"
+    ...constants.buttons,
+    backgroundColor: "#00bb55"
   },
   redButton: {
-    backgroundColor: "#ff0055",
-    height: 106,
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff"
+    ...constants.buttons,
+    backgroundColor: "#ff0055"
+  },
+  addRevisionButton: {
+    ...constants.buttons,
+    backgroundColor: "#fff"
   },
   myText: {
     fontSize: 20,
@@ -105,14 +111,6 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 22,
     position: "relative"
-  },
-  addRevisionButton: {
-    backgroundColor: "#fff",
-    height: 106,
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff"
   },
   modalBackground: {
     flex: 1,
