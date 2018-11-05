@@ -27,24 +27,34 @@ export default class App extends Component {
   };
 
   componentDidMount = () => {
-    this.listenForItems();
+    const { embedLevel } = this.state;
+    this.loadRevisionData(embedLevel);
+    // this.setDummyData();
   };
 
-  listenForItems = () => {
-    db.collection("RevisionFirestore")
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+  loadRevisionData = embedLevel => {
+    db.collection(`RevisionFirestore${embedLevel}`).onSnapshot(
+      querySnapshot => {
+        const newState = [];
+        querySnapshot.forEach(doc => {
           // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
+          console.log("HERE:", doc.id, " => ", doc.data().revision);
+          newState.push({
+            timestamp: doc.data().timestamp,
+            _key: doc.id,
+            revision: doc.data().revision
+          });
         });
-      });
-
+        this.setState({
+          embedLevel,
+          revisionList: newState
+        });
+      }
+    );
     // const { user, embedLevel } = this.state;
     // const revisionRef = firebase
     //   .database()
     //   .ref(`users/${user.uid}/revisionList/${embedLevel}`);
-
     // this.setState({ loading: true });
     // revisionRef.on("value", snapshot => {
     //   console.log("Loading data...");
@@ -66,26 +76,36 @@ export default class App extends Component {
     // });
   };
 
+  setDummyData = () => {
+    db.collection("RevisionFirestore").add({
+      timestamp: serverTimestamp,
+      revision: "appState"
+    });
+  };
+
   handleAddRevision = addRevisionText => {
     const {
       user: { uid },
       embedLevel
     } = this.state;
-    const postKey = firebase
-      .database()
-      .ref(`users/${uid}/revisionList${embedLevel}`)
-      .push().key;
-    const postObject = {
-      revision: addRevisionText
-    };
-    const revisionWrapper = {};
-    revisionWrapper[postKey] = postObject;
+    // const postObject = {
+    //   revision: addRevisionText,
+    //   timestamp: serverTimestamp
+    // };
 
-    firebase
-      .database()
-      .ref(`users/${uid}/revisionList/${embedLevel}`)
-      .update(revisionWrapper);
+    db.collection(`RevisionFirestore${embedLevel}`).add({
+      timestamp: serverTimestamp,
+      revision: addRevisionText
+    });
     this.setState({ showKeyboard: false });
+    // const revisionWrapper = {};
+    // revisionWrapper[postKey] = postObject;
+
+    // firebase
+    //   .database()
+    //   .ref(`users/${uid}/revisionList/${embedLevel}`)
+    //   .update(revisionWrapper);
+    // this.setState({ showKeyboard: false });
   };
 
   handleToggleKeyboard = () => {
@@ -125,13 +145,9 @@ export default class App extends Component {
   };
 
   handleClickRevision = _key => {
+    console.log("Clicked", _key);
     const { embedLevel } = this.state;
-    this.setState(
-      {
-        embedLevel: embedLevel.concat("/", _key)
-      },
-      () => this.listenForItems()
-    );
+    this.loadRevisionData(embedLevel.concat("/", _key, "/01"));
   };
 
   handleUpOneLevel = () => {
@@ -139,13 +155,9 @@ export default class App extends Component {
     if (embedLevel === "") {
       return;
     }
-    const re = /.*(?=\/)/;
-    this.setState(
-      {
-        embedLevel: embedLevel.match(re)[0]
-      },
-      () => this.listenForItems()
-    );
+    const re = /(.*)\/.*\/01/;
+    // console.log(embedLevel.match(re)[1]);
+    this.loadRevisionData(embedLevel.match(re)[1]);
   };
 
   render() {

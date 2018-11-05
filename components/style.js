@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#ffffff"
   },
-  todoInput: {
+  revisionInput: {
     height: 44,
     width: 300,
     textAlign: "center",
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     position: "relative"
   },
-  addTodoButton: {
+  addRevisionButton: {
     backgroundColor: "#fff",
     height: 106,
     justifyContent: "center",

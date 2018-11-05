@@ -16,16 +16,14 @@ const RevisionList = ({
 }) => (
   <FlatList
     data={revisionList}
-    scrollToEnd={true}
-    renderItem={({ item }) => {
-      return item.revision ? (
-        <RevisionItem
-          item={item}
-          handleClickRevision={handleClickRevision}
-          handleDeleteRevision={handleDeleteRevision}
-        />
-      ) : null;
-    }}
+    // scrollToEnd={true}
+    renderItem={({ item }) => (
+      <RevisionItem
+        item={item}
+        handleClickRevision={handleClickRevision}
+        handleDeleteRevision={handleDeleteRevision}
+      />
+    )}
     keyExtractor={item => item._key}
     ListFooterComponent={
       showKeyboard ? (

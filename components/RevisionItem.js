@@ -6,8 +6,10 @@ import styles from "./style";
 const RevisionItem = ({
   handleClickRevision,
   handleDeleteRevision,
-  item: { _key, revision }
+  item: { _key, revision },
+  item
 }) => {
+  // console.log("Item: ", item);
   const swipeSettings = {
     autoClose: true,
     onOpen: (secId, rowId, direction, id) => {
