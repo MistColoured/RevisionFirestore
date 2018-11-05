@@ -78,6 +78,12 @@ export default class App extends Component {
   };
 
   handleAddRevision = addRevisionText => {
+    if (!addRevisionText) {
+      this.setState({
+        showKeyboard: false
+      });
+      return;
+    }
     const {
       user: { uid },
       embedLevel
