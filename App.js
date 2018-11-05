@@ -33,54 +33,48 @@ export default class App extends Component {
   };
 
   loadRevisionData = embedLevel => {
-    db.collection(`RevisionFirestore${embedLevel}`).onSnapshot(
-      querySnapshot => {
+    db.collection(`RevisionFirestore${embedLevel}`)
+      .get()
+      .then(querySnapshot => {
         const newState = [];
         querySnapshot.forEach(doc => {
           // doc.data() is never undefined for query doc snapshots
-          console.log("HERE:", doc.id, " => ", doc.data().revision);
+          // console.log("HERE:", doc.id, " => ", doc.data().revision);
           newState.push({
-            timestamp: doc.data().timestamp,
+            timestamp: doc.data().timestamp.seconds,
             _key: doc.id,
             revision: doc.data().revision
           });
         });
+        console.log("toBeSorted...", newState);
+        newState.sort((a, b) => a.timestamp - b.timestamp);
+        console.log("...sorted");
         this.setState({
           embedLevel,
-          revisionList: newState
+          revisionList: newState,
+          showKeyboard: false
         });
-      }
-    );
-    // const { user, embedLevel } = this.state;
-    // const revisionRef = firebase
-    //   .database()
-    //   .ref(`users/${user.uid}/revisionList/${embedLevel}`);
-    // this.setState({ loading: true });
-    // revisionRef.on("value", snapshot => {
-    //   console.log("Loading data...");
-    //   const newState = [];
-    //   if (snapshot.exists()) {
-    //     const items = snapshot.val();
-    //     Object.entries(items).forEach(([key, val]) => {
-    //       newState.push({
-    //         revision: val.revision,
-    //         _key: key
-    //       });
-    //     });
-    //   }
-    //   this.setState({
-    //     revisionList: newState,
-    //     loading: false
-    //   });
-    //   console.log("...Data loaded");
-    // });
+      });
+  };
+
+  sortData = toBeSorted => {
+    console.log("toBeSorted...", toBeSorted);
+    toBeSorted.sort((one, two) => one.timestamp - two.timestamp);
+    console.log("...sorted");
   };
 
   setDummyData = () => {
-    db.collection("RevisionFirestore").add({
-      timestamp: serverTimestamp,
-      revision: "appState"
-    });
+    db.collection("RevisionFirestoreNext")
+      .add({
+        timestamp: serverTimestamp,
+        revision: "banana"
+      })
+      .then(function(docRef) {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
   };
 
   handleAddRevision = addRevisionText => {
@@ -88,24 +82,15 @@ export default class App extends Component {
       user: { uid },
       embedLevel
     } = this.state;
-    // const postObject = {
-    //   revision: addRevisionText,
-    //   timestamp: serverTimestamp
-    // };
-
-    db.collection(`RevisionFirestore${embedLevel}`).add({
-      timestamp: serverTimestamp,
-      revision: addRevisionText
-    });
-    this.setState({ showKeyboard: false });
-    // const revisionWrapper = {};
-    // revisionWrapper[postKey] = postObject;
-
-    // firebase
-    //   .database()
-    //   .ref(`users/${uid}/revisionList/${embedLevel}`)
-    //   .update(revisionWrapper);
-    // this.setState({ showKeyboard: false });
+    db.collection(`RevisionFirestore${embedLevel}`)
+      .add({
+        timestamp: serverTimestamp,
+        revision: addRevisionText
+      })
+      .then(() => this.loadRevisionData(embedLevel))
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
   };
 
   handleToggleKeyboard = () => {
@@ -114,14 +99,15 @@ export default class App extends Component {
   };
 
   handleDeleteRevision = id => {
-    const {
-      user: { uid },
-      embedLevel
-    } = this.state;
-    const deleteRef = firebase
-      .database()
-      .ref(`users/${uid}/revisionList/${embedLevel}/${id}`);
-    deleteRef.remove();
+    console.log("Delete something", id);
+    // const {
+    //   user: { uid },
+    //   embedLevel
+    // } = this.state;
+    // const deleteRef = firebase
+    //   .database()
+    //   .ref(`users/${uid}/revisionList/${embedLevel}/${id}`);
+    // deleteRef.remove();
   };
 
   renderSeparator = () => {
