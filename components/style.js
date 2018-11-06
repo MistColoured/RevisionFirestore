@@ -99,9 +99,22 @@ const styles = StyleSheet.create({
     ...constants.buttons,
     backgroundColor: "#fff"
   },
+  instructionsPage: {
+    height: height,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff",
+    backgroundColor: "#00bb55"
+  },
   myText: {
     fontSize: 20,
     color: "#ffffff"
+  },
+  myYellowText: {
+    fontSize: 20,
+    color: "#ffff00"
   },
   revisionInput: {
     height: 44,

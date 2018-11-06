@@ -5,13 +5,25 @@ import styles from "./style";
 
 const Instructions = ({ handleToggleInstructions }) => (
   <TouchableHighlight
-    style={styles.instructionsButton}
     underlayColor={"#ffee00"}
     onPress={handleToggleInstructions}
   >
-    <View>
-      <Text>Instructions</Text>
-      <Text>Do something here</Text>
+    <View style={styles.instructionsPage}>
+      <Text style={styles.myYellowText}>Instructions</Text>
+      <Text style={styles.myText}>Add an item: Click on +</Text>
+      <Text> </Text>
+      <Text style={styles.myYellowText}>Delete an item:</Text>
+      <Text style={styles.myText}>Swipe left and click 'Delete'</Text>
+      <Text> </Text>
+      <Text style={styles.myYellowText}>Edit an item:</Text>
+      <Text style={styles.myText}>Long press</Text>
+      <Text> </Text>
+      <Text style={styles.myYellowText}>Add sub-item:</Text>
+      <Text style={styles.myText}>Short press</Text>
+      <Text> </Text>
+      <Text> </Text>
+      <Text style={styles.myYellowText}>Touch anywhere on this</Text>
+      <Text style={styles.myYellowText}>screen to return</Text>
     </View>
   </TouchableHighlight>
 );
