@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableHighlight } from "react-native";
+import { Text, TouchableHighlight, Alert } from "react-native";
 import Swipeout from "react-native-swipeout";
 import styles from "./style";
 
@@ -10,14 +10,36 @@ const RevisionItem = ({
 }) => {
   const swipeSettings = {
     autoClose: true,
+    buttonWidth: 100,
     onOpen: (secId, rowId, direction, id) => {
       console.log("Delete slider", id);
     },
     right: [
       {
         text: "Delete",
+        backgroundColor: "red",
+        underlayColor: "rgba(0, 0, 0, 1, 0.6)",
         onPress: () => {
-          handleDeleteRevision(_key);
+          Alert.alert(
+            "Delete",
+            "Are you sure you want to delete ?",
+            [
+              {
+                text: "No",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              {
+                text: "Yes",
+                onPress: () => {
+                  handleDeleteRevision(_key);
+                }
+              }
+            ],
+            { cancelable: true }
+          );
+
+          // handleDeleteRevision(_key);
         }
       }
     ]
