@@ -7,17 +7,26 @@
  */
 
 import React, { Component } from "react";
-import { View, ActivityIndicator, Dimensions } from "react-native";
+import { View, ActivityIndicator, Dimensions, Text } from "react-native";
 import db, { auth, provider, serverTimestamp } from "./components/firebase";
 import RevisionList from "./components/RevisionList";
 import RoundAddButton from "./components/RoundAddButton";
 import Loader from "./components/Loader";
+import Instructions from "./components/Instructions";
+import Settings from "./components/Settings";
+import InstructionsButton from "./components/InstructionsButton";
+import SettingsButton from "./components/SettingsButton";
+import GoToListButton from "./components/GoToListButton";
+import MenuOptionsButton from "./components/MenuOptionsButton";
 
 export default class App extends Component {
   state = {
     revisionList: [],
     loading: false,
     showKeyboard: false,
+    showMenu: false,
+    showInstructions: false,
+    showSettings: false,
     text: "",
     // user: null,
     user: { uid: "2QfgNSNHwGQi1W53lYORVmn65l53" },
@@ -98,9 +107,30 @@ export default class App extends Component {
       });
   };
 
-  handleToggleKeyboard = () => {
+  handleShowKeyboard = () => {
     console.log("Toggle keyboard");
     this.setState({ showKeyboard: true });
+  };
+
+  handleToggleMenu = () => {
+    console.log("Toggle menu");
+    this.setState(prevState => ({
+      showMenu: !prevState.showMenu
+    }));
+  };
+
+  handleToggleInstructions = () => {
+    console.log("Toggle instructions");
+    this.setState(prevState => ({
+      showInstructions: !prevState.showInstructions
+    }));
+  };
+
+  handleToggleSettings = () => {
+    console.log("Toggle settings");
+    this.setState(prevState => ({
+      showSettings: !prevState.showSettings
+    }));
   };
 
   handleDeleteRevision = id => {
@@ -155,11 +185,27 @@ export default class App extends Component {
   };
 
   render() {
-    const { revisionList, embedLevel, loading, showKeyboard } = this.state;
+    const {
+      revisionList,
+      embedLevel,
+      loading,
+      showKeyboard,
+      showMenu,
+      showInstructions,
+      showSettings
+    } = this.state;
     console.log("Render");
     return (
       <View>
-        {loading ? (
+        {showMenu ? (
+          <MenuOptionsButton
+            handleToggleMenu={this.handleToggleMenu}
+            handleToggleInstructions={this.handleToggleInstructions}
+            showInstructions={showInstructions}
+            handleToggleSettings={this.handleToggleSettings}
+            showSettings={showSettings}
+          />
+        ) : loading ? (
           <Loader loading={loading} />
         ) : (
           <View
@@ -173,13 +219,12 @@ export default class App extends Component {
               handleClickRevision={this.handleClickRevision}
               handleDeleteRevision={this.handleDeleteRevision}
               handleAddRevision={this.handleAddRevision}
+              handleToggleMenu={this.handleToggleMenu}
               embedLevel={embedLevel}
               showKeyboard={showKeyboard}
             />
             {!showKeyboard ? (
-              <RoundAddButton
-                handleToggleKeyboard={this.handleToggleKeyboard}
-              />
+              <RoundAddButton handleShowKeyboard={this.handleShowKeyboard} />
             ) : null}
           </View>
         )}

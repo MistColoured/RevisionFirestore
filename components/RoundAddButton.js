@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const RoundAddButton = ({ handleToggleKeyboard }) => (
+const RoundAddButton = ({ handleShowKeyboard }) => (
   <TouchableOpacity
     style={{
       borderWidth: 1,
@@ -17,7 +17,7 @@ const RoundAddButton = ({ handleToggleKeyboard }) => (
       bottom: 10,
       right: 10
     }}
-    onPress={handleToggleKeyboard}
+    onPress={handleShowKeyboard}
   >
     <Icon name={"plus"} size={20} color="#fff" />
   </TouchableOpacity>

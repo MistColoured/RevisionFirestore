@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   redButton: {
     ...constants.buttons,
-    backgroundColor: "#ff0055"
+    backgroundColor: "#ee0055"
   },
   addRevisionButton: {
     ...constants.buttons,
