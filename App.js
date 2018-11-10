@@ -12,12 +12,8 @@ import db, { auth, provider, serverTimestamp } from "./components/firebase";
 import RevisionList from "./components/RevisionList";
 import RoundAddButton from "./components/RoundAddButton";
 import Loader from "./components/Loader";
-import Instructions from "./components/Instructions";
-import Settings from "./components/Settings";
-import InstructionsButton from "./components/InstructionsButton";
-import SettingsButton from "./components/SettingsButton";
-import GoToListButton from "./components/GoToListButton";
 import MenuOptionsButton from "./components/MenuOptionsButton";
+import dataIO from "./components/loadRevisionData";
 
 export default class App extends Component {
   state = {
@@ -36,40 +32,23 @@ export default class App extends Component {
   };
 
   componentDidMount = () => {
-    this.loadRevisionData();
+    const { embedLevel } = this.state;
+    this.loadData(embedLevel);
     // this.setDummyData();
   };
 
-  loadRevisionData = (embedLevel = "") => {
-    db.collection(`RevisionFirestore${embedLevel}`)
-      .get()
-      .then(querySnapshot => {
-        const newState = [];
-        querySnapshot.forEach(doc => {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log("HERE:", doc.id, " => ", doc.data().revision);
-          newState.push({
-            timestamp: doc.data().timestamp.seconds,
-            _key: doc.id,
-            revision: doc.data().revision
-          });
-        });
-        console.log("toBeSorted...", newState);
-        newState.sort((a, b) => a.timestamp - b.timestamp);
-        console.log("...sorted");
+  loadData(embedLevel = "") {
+    dataIO
+      .loadRevisionData(embedLevel)
+      .then(newState =>
         this.setState({
           embedLevel,
           revisionList: newState,
           showKeyboard: false
-        });
-      });
-  };
-
-  sortData = toBeSorted => {
-    console.log("toBeSorted...", toBeSorted);
-    toBeSorted.sort((one, two) => one.timestamp - two.timestamp);
-    console.log("...sorted");
-  };
+        })
+      )
+      .catch(() => this.setState({ refreshing: false }));
+  }
 
   setDummyData = () => {
     db.collection("RevisionFirestoreNext")
@@ -96,12 +75,9 @@ export default class App extends Component {
       user: { uid },
       embedLevel
     } = this.state;
-    db.collection(`RevisionFirestore${embedLevel}`)
-      .add({
-        timestamp: serverTimestamp,
-        revision: addRevisionText
-      })
-      .then(() => this.loadRevisionData(embedLevel))
+    dataIO
+      .addDoc(embedLevel, addRevisionText)
+      .then(() => this.loadData(embedLevel))
       .catch(function(error) {
         console.error("Error adding document: ", error);
       });
@@ -136,12 +112,11 @@ export default class App extends Component {
   handleDeleteRevision = id => {
     const { embedLevel } = this.state;
     console.log("Delete something", id);
-    db.collection(`RevisionFirestore${embedLevel}`)
-      .doc(id)
-      .delete()
+    dataIO
+      .deleteDoc(embedLevel, id)
       .then(() => {
         console.log("Document successfully deleted!");
-        this.loadRevisionData(embedLevel);
+        this.loadData(embedLevel);
       })
       .catch(function(error) {
         console.error("Error removing document: ", error);
@@ -171,7 +146,7 @@ export default class App extends Component {
   handleClickRevision = _key => {
     console.log("Clicked", _key);
     const { embedLevel } = this.state;
-    this.loadRevisionData(embedLevel.concat("/", _key, "/01"));
+    this.loadData(embedLevel.concat("/", _key, "/01"));
   };
 
   handleUpOneLevel = () => {
@@ -181,7 +156,7 @@ export default class App extends Component {
     }
     const re = /(.*)\/.*\/01/;
     // console.log(embedLevel.match(re)[1]);
-    this.loadRevisionData(embedLevel.match(re)[1]);
+    this.loadData(embedLevel.match(re)[1]);
   };
 
   render() {
