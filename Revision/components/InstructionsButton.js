@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableHighlight } from "react-native";
 
-import styles from "./style";
+import styles from "../styles/style";
 
 const InstructionsButton = ({ handleToggleInstructions }) => (
   <TouchableHighlight

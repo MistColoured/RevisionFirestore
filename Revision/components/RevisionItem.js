@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableHighlight, Alert } from "react-native";
 import Swipeout from "react-native-swipeout";
-import styles from "./style";
+import styles from "../styles/style";
 
 const RevisionItem = ({
   handleClickRevision,

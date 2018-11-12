@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, TouchableHighlight, TextInput } from "react-native";
 
-import styles from "./style";
+import styles from "../../styles/style";
 
 const Settings = ({ handleToggleSettings }) => (
   <TouchableHighlight

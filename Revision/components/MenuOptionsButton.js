@@ -3,7 +3,7 @@ import { View } from "react-native";
 import InstructionsButton from "./InstructionsButton";
 import Instructions from "./Instructions";
 import SettingsButton from "./SettingsButton";
-import Settings from "./Settings";
+import Settings from "./Settings/Settings";
 import GoToListButton from "./GoToListButton";
 
 const MenuOptionsButton = ({

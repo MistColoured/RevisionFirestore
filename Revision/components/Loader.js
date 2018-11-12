@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Modal, ActivityIndicator } from "react-native";
-import styles from "./style";
+import styles from "../styles/style";
 
 const Loader = props => {
   const { loading, ...attributes } = props;

@@ -1,6 +1,6 @@
 import React from "react";
 import { TextInput } from "react-native";
-import styles from "./style";
+import styles from "../styles/style";
 
 const RevisionInput = () => (
   <TextInput

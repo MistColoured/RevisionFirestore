@@ -8,17 +8,17 @@
 
 import React, { Component } from "react";
 import { View, ActivityIndicator, Dimensions, Text } from "react-native";
-import db, { auth, provider, serverTimestamp } from "./components/firebase";
+import db, { auth, provider, serverTimestamp } from "./database/firebase";
 import RevisionList from "./components/RevisionList";
 import RoundAddButton from "./components/RoundAddButton";
-import Loader from "./components/Loader";
+// import SplashScreen from "./components/SplashScreen";
 import MenuOptionsButton from "./components/MenuOptionsButton";
-import dataIO from "./components/loadRevisionData";
+import dataIO from "./database/loadRevisionData";
 
 export default class App extends Component {
   state = {
     revisionList: [],
-    loading: false,
+    splashScreen: true,
     showKeyboard: false,
     showMenu: false,
     showInstructions: false,
@@ -40,13 +40,15 @@ export default class App extends Component {
   loadData(embedLevel = "") {
     dataIO
       .loadRevisionData(embedLevel)
-      .then(newState =>
+      .then(newState => {
+        console.log("Data loaded");
         this.setState({
           embedLevel,
           revisionList: newState,
-          showKeyboard: false
-        })
-      )
+          showKeyboard: false,
+          splashScreen: false
+        });
+      })
       .catch(() => this.setState({ refreshing: false }));
   }
 
@@ -163,7 +165,7 @@ export default class App extends Component {
     const {
       revisionList,
       embedLevel,
-      loading,
+      splashScreen,
       showKeyboard,
       showMenu,
       showInstructions,
@@ -171,8 +173,9 @@ export default class App extends Component {
     } = this.state;
     console.log("Render");
     return (
-      <View>
-        {showMenu ? (
+      <View style={{ minHeight: "100%" }}>
+        {false ? // <SplashScreen />
+        null : showMenu ? (
           <MenuOptionsButton
             handleToggleMenu={this.handleToggleMenu}
             handleToggleInstructions={this.handleToggleInstructions}
@@ -180,29 +183,21 @@ export default class App extends Component {
             handleToggleSettings={this.handleToggleSettings}
             showSettings={showSettings}
           />
-        ) : loading ? (
-          <Loader loading={loading} />
         ) : (
-          <View
-            style={{
-              minHeight: "100%"
-            }}
-          >
-            <RevisionList
-              revisionList={revisionList}
-              handleUpOneLevelButton={this.handleUpOneLevel}
-              handleClickRevision={this.handleClickRevision}
-              handleDeleteRevision={this.handleDeleteRevision}
-              handleAddRevision={this.handleAddRevision}
-              handleToggleMenu={this.handleToggleMenu}
-              embedLevel={embedLevel}
-              showKeyboard={showKeyboard}
-            />
-            {!showKeyboard ? (
-              <RoundAddButton handleShowKeyboard={this.handleShowKeyboard} />
-            ) : null}
-          </View>
+          <RevisionList
+            revisionList={revisionList}
+            handleUpOneLevelButton={this.handleUpOneLevel}
+            handleClickRevision={this.handleClickRevision}
+            handleDeleteRevision={this.handleDeleteRevision}
+            handleAddRevision={this.handleAddRevision}
+            handleToggleMenu={this.handleToggleMenu}
+            embedLevel={embedLevel}
+            showKeyboard={showKeyboard}
+          />
         )}
+        {!showKeyboard ? (
+          <RoundAddButton handleShowKeyboard={this.handleShowKeyboard} />
+        ) : null}
       </View>
     );
   }
