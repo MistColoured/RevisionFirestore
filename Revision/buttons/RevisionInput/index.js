@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Text, TouchableHighlight, TextInput } from "react-native";
 
-import styles from "../styles/style";
+import styles from "./styles";
 
-export default class RevisionInputButton extends Component {
+export default class RevisionInput extends Component {
   state = {
     addRevisionText: ""
   };
@@ -11,10 +11,7 @@ export default class RevisionInputButton extends Component {
     const { handleAddRevision } = this.props;
     const { addRevisionText } = this.state;
     return (
-      <TouchableHighlight
-        style={styles.addRevisionButton}
-        underlayColor={"#ffee00"}
-      >
+      <TouchableHighlight style={styles.button} underlayColor={"#ffee00"}>
         <TextInput
           maxLength={32}
           autoFocus={true}

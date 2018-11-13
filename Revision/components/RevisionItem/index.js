@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableHighlight, Alert } from "react-native";
 import Swipeout from "react-native-swipeout";
-import styles from "../styles/style";
+import styles from "./styles";
 
 const RevisionItem = ({
   handleClickRevision,
@@ -51,7 +51,7 @@ const RevisionItem = ({
         underlayColor={"#00cc55"}
         onPress={() => handleClickRevision(_key)}
       >
-        <Text style={styles.myText}>{revision}</Text>
+        <Text style={styles.text}>{revision}</Text>
       </TouchableHighlight>
     </Swipeout>
   );

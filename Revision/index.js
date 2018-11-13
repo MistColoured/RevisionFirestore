@@ -10,9 +10,9 @@ import React, { Component } from "react";
 import { View, ActivityIndicator, Dimensions, Text } from "react-native";
 import db, { auth, provider, serverTimestamp } from "./database/firebase";
 import RevisionList from "./components/RevisionList";
-import RoundAddButton from "./components/RoundAddButton";
-// import SplashScreen from "./components/SplashScreen";
-import MenuOptionsButton from "./components/MenuOptionsButton";
+import RoundAddButton from "./buttons/RoundAddButton";
+import SplashScreen from "./screens/SplashScreen";
+import MenuOptions from "./buttons/MenuOptions";
 import dataIO from "./database/loadRevisionData";
 
 export default class App extends Component {
@@ -20,6 +20,7 @@ export default class App extends Component {
     revisionList: [],
     splashScreen: true,
     showKeyboard: false,
+    showPlusButton: false,
     showMenu: false,
     showInstructions: false,
     showSettings: false,
@@ -32,6 +33,12 @@ export default class App extends Component {
   };
 
   componentDidMount = () => {
+    setTimeout(() => {
+      this.setState({
+        splashScreen: false,
+        showPlusButton: true
+      });
+    }, 2000);
     const { embedLevel } = this.state;
     this.loadData(embedLevel);
     // this.setDummyData();
@@ -45,8 +52,7 @@ export default class App extends Component {
         this.setState({
           embedLevel,
           revisionList: newState,
-          showKeyboard: false,
-          splashScreen: false
+          showKeyboard: false
         });
       })
       .catch(() => this.setState({ refreshing: false }));
@@ -93,7 +99,8 @@ export default class App extends Component {
   handleToggleMenu = () => {
     console.log("Toggle menu");
     this.setState(prevState => ({
-      showMenu: !prevState.showMenu
+      showMenu: !prevState.showMenu,
+      showPlusButton: !prevState.showPlusButton
     }));
   };
 
@@ -167,6 +174,7 @@ export default class App extends Component {
       embedLevel,
       splashScreen,
       showKeyboard,
+      showPlusButton,
       showMenu,
       showInstructions,
       showSettings
@@ -174,9 +182,10 @@ export default class App extends Component {
     console.log("Render");
     return (
       <View style={{ minHeight: "100%" }}>
-        {false ? // <SplashScreen />
-        null : showMenu ? (
-          <MenuOptionsButton
+        {splashScreen ? (
+          <SplashScreen />
+        ) : showMenu ? (
+          <MenuOptions
             handleToggleMenu={this.handleToggleMenu}
             handleToggleInstructions={this.handleToggleInstructions}
             showInstructions={showInstructions}
@@ -195,7 +204,7 @@ export default class App extends Component {
             showKeyboard={showKeyboard}
           />
         )}
-        {!showKeyboard ? (
+        {showPlusButton ? (
           <RoundAddButton handleShowKeyboard={this.handleShowKeyboard} />
         ) : null}
       </View>

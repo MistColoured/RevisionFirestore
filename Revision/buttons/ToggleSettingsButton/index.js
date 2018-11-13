@@ -1,16 +1,16 @@
 import React from "react";
 import { Text, TouchableHighlight } from "react-native";
 
-import styles from "../styles/style";
+import styles from "./styles";
 
-const SettingsButton = ({ handleToggleSettings }) => (
+const ToggleSettingsButton = ({ handleToggleSettings }) => (
   <TouchableHighlight
-    style={styles.redButton}
+    style={styles.button}
     underlayColor={"#ff0066"}
     onPress={handleToggleSettings}
   >
-    <Text style={styles.myText}>Settings</Text>
+    <Text style={styles.text}>Settings</Text>
   </TouchableHighlight>
 );
 
-export default SettingsButton;
+export default ToggleSettingsButton;

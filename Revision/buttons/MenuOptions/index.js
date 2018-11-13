@@ -1,12 +1,12 @@
 import React from "react";
 import { View } from "react-native";
-import InstructionsButton from "./InstructionsButton";
-import Instructions from "./Instructions";
-import SettingsButton from "./SettingsButton";
-import Settings from "./Settings/Settings";
-import GoToListButton from "./GoToListButton";
+import ToggleInstructionsButton from "../ToggleInstructionsButton";
+import Instructions from "../../screens/Instructions";
+import ToggleSettingsButton from "../ToggleSettingsButton";
+import Settings from "../../screens/Settings";
+import GoToListButton from "../GoToListButton";
 
-const MenuOptionsButton = ({
+const MenuOptions = ({
   handleToggleMenu,
   handleToggleInstructions,
   showInstructions,
@@ -20,14 +20,14 @@ const MenuOptionsButton = ({
       <Settings handleToggleSettings={handleToggleSettings} />
     ) : (
       <View>
-        <InstructionsButton
+        <ToggleInstructionsButton
           handleToggleInstructions={handleToggleInstructions}
         />
-        <SettingsButton handleToggleSettings={handleToggleSettings} />
+        <ToggleSettingsButton handleToggleSettings={handleToggleSettings} />
         <GoToListButton handleToggleMenu={handleToggleMenu} />
       </View>
     )}
   </View>
 );
 
-export default MenuOptionsButton;
+export default MenuOptions;
