@@ -7,15 +7,28 @@
  */
 
 import React, { Component } from "react";
-import { View, ActivityIndicator, Dimensions, Text } from "react-native";
+import { View, ActivityIndicator, KeyboardAvoidingView } from "react-native";
 import db, { auth, provider, serverTimestamp } from "./database/firebase";
+import Container from "./components/Container";
 import RevisionList from "./components/RevisionList";
 import RoundAddButton from "./buttons/RoundAddButton";
 import SplashScreen from "./screens/SplashScreen";
 import MenuOptions from "./buttons/MenuOptions";
 import dataIO from "./database/loadRevisionData";
 
-export default class App extends Component {
+type State = {
+  embedLevel: string,
+  revisionList: Array<string>,
+  showKeyboard: boolean,
+  splashScreen: boolean,
+  showPlusButton: boolean,
+  showMenu: boolean,
+  showPlusButton: boolean,
+  showInstructions: boolean,
+  showSettings: boolean
+};
+
+export default class App extends Component<null, State> {
   state = {
     revisionList: [],
     splashScreen: true,
@@ -29,22 +42,17 @@ export default class App extends Component {
     user: { uid: "2QfgNSNHwGQi1W53lYORVmn65l53" },
     error: null,
     embedLevel: "",
-    activeRowKey: ""
+    activeRowKey: "",
+    user: ""
   };
 
   componentDidMount = () => {
-    setTimeout(() => {
-      this.setState({
-        splashScreen: false,
-        showPlusButton: true
-      });
-    }, 2000);
     const { embedLevel } = this.state;
     this.loadData(embedLevel);
     // this.setDummyData();
   };
 
-  loadData(embedLevel = "") {
+  loadData(embedLevel: string = "") {
     dataIO
       .loadRevisionData(embedLevel)
       .then(newState => {
@@ -52,10 +60,12 @@ export default class App extends Component {
         this.setState({
           embedLevel,
           revisionList: newState,
-          showKeyboard: false
+          showKeyboard: false,
+          splashScreen: false,
+          showPlusButton: true
         });
       })
-      .catch(() => this.setState({ refreshing: false }));
+      .catch(() => this.setState({ splashScreen: false }));
   }
 
   setDummyData = () => {
@@ -72,17 +82,15 @@ export default class App extends Component {
       });
   };
 
-  handleAddRevision = addRevisionText => {
+  handleAddRevision = (addRevisionText: string) => {
+    console.log("Add a new item");
     if (!addRevisionText) {
       this.setState({
         showKeyboard: false
       });
       return;
     }
-    const {
-      user: { uid },
-      embedLevel
-    } = this.state;
+    const { embedLevel } = this.state;
     dataIO
       .addDoc(embedLevel, addRevisionText)
       .then(() => this.loadData(embedLevel))
@@ -118,7 +126,7 @@ export default class App extends Component {
     }));
   };
 
-  handleDeleteRevision = id => {
+  handleDeleteRevision = (id: string) => {
     const { embedLevel } = this.state;
     console.log("Delete something", id);
     dataIO
@@ -145,14 +153,11 @@ export default class App extends Component {
     );
   };
 
-  renderHeader = () => {
-    return <SearchBar placeholder="Type Here..." lightTheme round />;
-  };
   renderLoading = () => {
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
-  handleClickRevision = _key => {
+  handleClickRevision = (_key: string) => {
     console.log("Clicked", _key);
     const { embedLevel } = this.state;
     this.loadData(embedLevel.concat("/", _key, "/01"));
@@ -164,7 +169,7 @@ export default class App extends Component {
       return;
     }
     const re = /(.*)\/.*\/01/;
-    // console.log(embedLevel.match(re)[1]);
+    // $FlowFixMe
     this.loadData(embedLevel.match(re)[1]);
   };
 
@@ -181,33 +186,35 @@ export default class App extends Component {
     } = this.state;
     console.log("Render");
     return (
-      <View style={{ minHeight: "100%" }}>
-        {splashScreen ? (
-          <SplashScreen />
-        ) : showMenu ? (
-          <MenuOptions
-            handleToggleMenu={this.handleToggleMenu}
-            handleToggleInstructions={this.handleToggleInstructions}
-            showInstructions={showInstructions}
-            handleToggleSettings={this.handleToggleSettings}
-            showSettings={showSettings}
-          />
-        ) : (
-          <RevisionList
-            revisionList={revisionList}
-            handleUpOneLevelButton={this.handleUpOneLevel}
-            handleClickRevision={this.handleClickRevision}
-            handleDeleteRevision={this.handleDeleteRevision}
-            handleAddRevision={this.handleAddRevision}
-            handleToggleMenu={this.handleToggleMenu}
-            embedLevel={embedLevel}
-            showKeyboard={showKeyboard}
-          />
-        )}
-        {showPlusButton ? (
-          <RoundAddButton handleShowKeyboard={this.handleShowKeyboard} />
-        ) : null}
-      </View>
+      <Container>
+        <KeyboardAvoidingView behavior="padding">
+          {splashScreen ? (
+            <SplashScreen />
+          ) : showMenu ? (
+            <MenuOptions
+              handleToggleMenu={this.handleToggleMenu}
+              handleToggleInstructions={this.handleToggleInstructions}
+              showInstructions={showInstructions}
+              handleToggleSettings={this.handleToggleSettings}
+              showSettings={showSettings}
+            />
+          ) : (
+            <RevisionList
+              revisionList={revisionList}
+              handleUpOneLevelButton={this.handleUpOneLevel}
+              handleClickRevision={this.handleClickRevision}
+              handleDeleteRevision={this.handleDeleteRevision}
+              handleAddRevision={this.handleAddRevision}
+              handleToggleMenu={this.handleToggleMenu}
+              embedLevel={embedLevel}
+              showKeyboard={showKeyboard}
+            />
+          )}
+          {showPlusButton ? (
+            <RoundAddButton handleShowKeyboard={this.handleShowKeyboard} />
+          ) : null}
+        </KeyboardAvoidingView>
+      </Container>
     );
   }
 }
