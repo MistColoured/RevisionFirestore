@@ -4,8 +4,7 @@ const { height, width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   image: {
-    width: width / 2,
-    height: width / 2,
+    height: height / 3,
     marginBottom: 15
   },
   text: {

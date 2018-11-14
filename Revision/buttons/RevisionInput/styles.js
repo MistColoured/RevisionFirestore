@@ -1,13 +1,14 @@
-import { StyleSheet, Dimensions } from "react-native";
-import { BUTTON, TEXT } from "../../styles/common";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  button: {
-    ...BUTTON,
-    backgroundColor: "#ee0055"
-  },
-  text: {
-    ...TEXT
+  revisionInput: {
+    height: 44,
+    width: 300,
+    textAlign: "center",
+    borderColor: "gray",
+    borderWidth: 3,
+    borderRadius: 22,
+    position: "relative"
   }
 });
 

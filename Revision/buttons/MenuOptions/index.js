@@ -1,10 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import ToggleInstructionsButton from "../ToggleInstructionsButton";
 import Instructions from "../../screens/Instructions";
-import ToggleSettingsButton from "../ToggleSettingsButton";
 import Settings from "../../screens/Settings";
-import GoToListButton from "../GoToListButton";
+import Button from "../Button";
 
 const MenuOptions = ({
   handleToggleMenu,
@@ -20,11 +18,21 @@ const MenuOptions = ({
       <Settings handleToggleSettings={handleToggleSettings} />
     ) : (
       <View>
-        <ToggleInstructionsButton
-          handleToggleInstructions={handleToggleInstructions}
+        <Button
+          onPress={handleToggleInstructions}
+          text="Instructions"
+          colour="#ee0055"
         />
-        <ToggleSettingsButton handleToggleSettings={handleToggleSettings} />
-        <GoToListButton handleToggleMenu={handleToggleMenu} />
+        <Button
+          onPress={handleToggleSettings}
+          text="Settings"
+          colour="#ee0055"
+        />
+        <Button
+          onPress={handleToggleMenu}
+          text="Back to list"
+          colour="#ff0066"
+        />
       </View>
     )}
   </View>

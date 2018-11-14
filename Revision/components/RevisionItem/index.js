@@ -45,15 +45,15 @@ const RevisionItem = ({
     ]
   };
   return (
-    <Swipeout {...swipeSettings}>
-      <TouchableHighlight
-        style={styles.button}
-        underlayColor={"#00cc55"}
-        onPress={() => handleClickRevision(_key)}
-      >
-        <Text style={styles.text}>{revision}</Text>
-      </TouchableHighlight>
-    </Swipeout>
+    // <Swipeout {...swipeSettings}>
+    <TouchableHighlight
+      style={styles.button}
+      underlayColor={"#00cc55"}
+      onPress={() => handleClickRevision(_key)}
+    >
+      <Text style={styles.text}>{revision}</Text>
+    </TouchableHighlight>
+    // </Swipeout>
   );
 };
 

@@ -1,10 +1,9 @@
 import React from "react";
 import { FlatList } from "react-native";
 
+import Button from "../../buttons/Button";
 import RevisionItem from "../RevisionItem";
-import UpOneLevelButton from "../../buttons/UpOneLevelButton";
-import ToggleMenuButton from "../../buttons/ToggleMenuButton";
-import RevisionInput from "../RevisionInput";
+import RevisionInput from "../../buttons/RevisionInput";
 
 const RevisionList = ({
   handleClickRevision,
@@ -32,9 +31,13 @@ const RevisionList = ({
         showKeyboard ? (
           <RevisionInput handleAddRevision={handleAddRevision} />
         ) : embedLevel ? (
-          <UpOneLevelButton handleUpOneLevelButton={handleUpOneLevelButton} />
+          <Button
+            onPress={handleUpOneLevelButton}
+            text="Up One Level"
+            colour="#ff0055"
+          />
         ) : revisionList.length ? (
-          <ToggleMenuButton handleToggleMenu={handleToggleMenu} />
+          <Button onPress={handleToggleMenu} text="Menu" colour="#ff0066" />
         ) : null
       }
     />
