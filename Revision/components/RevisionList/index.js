@@ -1,15 +1,13 @@
 import React from "react";
 import { FlatList } from "react-native";
-
-import Button from "../../buttons/Button";
-import RevisionItem from "../RevisionItem";
 import RevisionInput from "../../buttons/RevisionInput";
+import Button from "../../buttons/Button";
 
 const RevisionList = ({
   handleClickRevision,
   handleDeleteRevision,
   handleAddRevision,
-  handleUpOneLevelButton,
+  handleUpOneLevel,
   handleToggleMenu,
   revisionList,
   embedLevel,
@@ -19,11 +17,11 @@ const RevisionList = ({
     <FlatList
       data={revisionList}
       // scrollToEnd={true}
-      renderItem={({ item }) => (
-        <RevisionItem
-          item={item}
-          handleClickRevision={handleClickRevision}
-          handleDeleteRevision={handleDeleteRevision}
+      renderItem={({ item: { revision, _key } }) => (
+        <Button
+          onPress={() => handleClickRevision(_key)}
+          text={revision}
+          colour={"#00cc55"}
         />
       )}
       keyExtractor={item => item._key}
@@ -32,7 +30,7 @@ const RevisionList = ({
           <RevisionInput handleAddRevision={handleAddRevision} />
         ) : embedLevel ? (
           <Button
-            onPress={handleUpOneLevelButton}
+            onPress={handleUpOneLevel}
             text="Up One Level"
             colour="#ff0055"
           />

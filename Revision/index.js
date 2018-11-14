@@ -201,7 +201,7 @@ export default class App extends Component<null, State> {
           ) : (
             <RevisionList
               revisionList={revisionList}
-              handleUpOneLevelButton={this.handleUpOneLevel}
+              handleUpOneLevel={this.handleUpOneLevel}
               handleClickRevision={this.handleClickRevision}
               handleDeleteRevision={this.handleDeleteRevision}
               handleAddRevision={this.handleAddRevision}
